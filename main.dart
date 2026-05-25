@@ -1,26 +1,25 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(const MaterialApp(home: MainScreen(), debugShowCheckedModeBanner: false));
+void main() => runApp(const MaterialApp(home: MainApp(), debugShowCheckedModeBanner: false));
 
-class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+class MainApp extends StatefulWidget {
+  const MainApp({super.key});
   @override
-  State<MainScreen> createState() => _MainScreenState();
+  State<MainApp> createState() => _MainAppState();
 }
 
-class _MainScreenState extends State<MainScreen> {
-  int _index = 0;
-  final List<Widget> _pages = [const HomeScreen(), const ChaptersScreen(), const SubstitutesScreen(), const SupportScreen()];
-
+class _MainAppState extends State<MainApp> {
+  int _tab = 0;
+  final List<Widget> _pages = [const HomeP(), const ChaptersP(), const SubsP(), const SupportP()];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_index],
+      body: _pages[_tab],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        currentIndex: _index,
+        currentIndex: _tab,
         selectedItemColor: Colors.teal,
-        onTap: (i) => setState(() => _index = i),
+        onTap: (i) => setState(() => _tab = i),
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'الرئيسية'),
           BottomNavigationBarItem(icon: Icon(Icons.book), label: 'الفصول'),
@@ -33,67 +32,58 @@ class _MainScreenState extends State<MainScreen> {
 }
 
 // 1. الرئيسية
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class HomeP extends StatelessWidget {
+  const HomeP({super.key});
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('تطبيق النجار'), backgroundColor: Colors.teal, foregroundColor: Colors.white),
-      body: const Center(child: Text('مرحباً بك في طريق التعافي.\nابدأ رحلتك من الفصول بالأسفل.', textAlign: TextAlign.center, style: TextStyle(fontSize: 20))),
-    );
-  }
+  Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(title: const Text('خُدعة الواقع'), backgroundColor: Colors.teal),
+    body: const Center(child: Text('ابدأ رحلة التحرر من الإدمان\nبكل هدوء وذكاء.', textAlign: TextAlign.center, style: TextStyle(fontSize: 22))),
+  );
 }
 
 // 2. الفصول
-class ChaptersScreen extends StatelessWidget {
-  const ChaptersScreen({super.key});
-  final Map<String, String> chapters = const {
-    "الفصل الأول": "فهم المحفزات: العادة تبدأ بمثير. حدد المثيرات التي تدفعك للعادة القديمة وتجنبها.",
-    "الفصل الثاني": "البدائل السلوكية: عندما يظهر المثير، استبدل العادة فوراً بنشاط بديل لمدة 5 دقائق.",
-    "الفصل الثالث": "نظام الدعم: لا تكن وحيداً. شارك تقدمك مع صديق تثق به أو معالج مختص.",
-    "الفصل الرابع": "الاستدامة: الصبر هو مفتاح النجاح. كل يوم يمر هو انتصار جديد لك.",
-  };
+class ChaptersP extends StatelessWidget {
+  const ChaptersP({super.key});
+  final List<Map<String, String>> data = const [
+    [span_0](start_span){"title": "الفصل الأول: كشف الخدعة", "content": "مواجهة الحقيقة: أنت لست ضعيفاً، أنت واقع في خدعة.. الإدمان هو ظل يلاحق يومك[span_0](end_span)."},
+    [span_1](start_span){"title": "الفصل الثاني: هندسة الهدم", "content": "قانون الـ 20%: اخصم 20% من الكمية أسبوعياً لتخادع دماغك وتتحرر بلا ألم[span_1](end_span)."},
+    {"title": "الفصل الثالث: التحرر والبدائل", "content": "استبدل 'السموم' ببدائل صحية. [span_2](start_span)تذكر أن المتعة التي تظنها هي مجرد تسكين لألم الإدمان نفسه[span_2](end_span)."},
+    {"title": "الفصل الرابع: الحصن المنيع", "content": "لا تلتفت للحنين الكاذب، فهو حنين السجين لزنزانته. [span_3](start_span)أنت الآن مهندس قبة حرة في دماغك[span_3](end_span)."},
+  ];
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('المنهجية'), backgroundColor: Colors.teal, foregroundColor: Colors.white),
-      body: ListView(children: chapters.keys.map((title) => ListTile(
-        title: Text(title),
-        trailing: const Icon(Icons.arrow_forward_ios),
-        onTap: () => showDialog(context: context, builder: (_) => AlertDialog(title: Text(title), content: Text(chapters[title]!))),
-      )).toList()),
-    );
-  }
+  Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(title: const Text('فصول الكتاب'), backgroundColor: Colors.teal),
+    body: ListView.builder(itemCount: data.length, itemBuilder: (c, i) => Card(
+      margin: const EdgeInsets.all(10),
+      child: ListTile(title: Text(data[i]["title"]!), onTap: () => _openPage(c, data[i]["title"]!, data[i]["content"]!)),
+    )),
+  );
+  void _openPage(c, title, content) => Navigator.push(c, MaterialPageRoute(builder: (_) => Scaffold(
+    appBar: AppBar(title: Text(title)),
+    body: SingleChildScrollView(padding: const EdgeInsets.all(20), child: Text(content, style: const TextStyle(fontSize: 18))),
+  )));
 }
 
 // 3. البدائل
-class SubstitutesScreen extends StatelessWidget {
-  const SubstitutesScreen({super.key});
+class SubsP extends StatelessWidget {
+  const SubsP({super.key});
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('البدائل'), backgroundColor: Colors.teal, foregroundColor: Colors.white),
-      body: Column(children: [
-        ListTile(title: const Text("البديل النفسي"), onTap: () => _show(context, "تنفس بعمق 10 مرات، اكتب شعورك في ورقة، أو استمع لصوت طبيعي.")),
-        ListTile(title: const Text("البديل الجسدي"), onTap: () => _show(context, "اشرب كوباً كبيراً من الماء، اغسل وجهك بماء بارد، أو مارس المشي السريع.")),
-      ]),
-    );
-  }
-  void _show(context, msg) => showDialog(context: context, builder: (_) => AlertDialog(content: Text(msg)));
+  Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(title: const Text('البدائل الذكية'), backgroundColor: Colors.teal),
+    body: ListView(children: const [
+      [span_4](start_span)ExpansionTile(title: Text("البديل النفسي"), children: [Padding(padding: EdgeInsets.all(15), child: Text("تنفس بعمق، اكتب شعورك في ورقة، أو استمع لصوت طبيعي لتفكيك مسمار التوتر[span_4](end_span)."))]),
+      [span_5](start_span)ExpansionTile(title: Text("البديل الجسدي"), children: [Padding(padding: EdgeInsets.all(15), child: Text("اشرب كوب ماء بارد، اغسل وجهك، أو مارس المشي السريع لقطع حبل الإدمان[span_5](end_span)."))]),
+    ]),
+  );
 }
 
 // 4. الدعم
-class SupportScreen extends StatelessWidget {
-  const SupportScreen({super.key});
+class SupportP extends StatelessWidget {
+  const SupportP({super.key});
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('الدعم'), backgroundColor: Colors.teal, foregroundColor: Colors.white),
-      body: Center(child: ElevatedButton(
-        onPressed: () => showDialog(context: context, builder: (_) => const AlertDialog(title: Text('طوارئ'), content: Text('أنت أقوى من هذه الرغبة. اتصل بصديقك الآن!'))),
-        child: const Text('طلب مساعدة فورية'),
-      )),
-    );
-  }
+  Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(title: const Text('رسائل الدعم'), backgroundColor: Colors.teal),
+    body: const Center(child: Padding(padding: EdgeInsets.all(20), child: Text("أنت لست ضعيفاً، أنت بطل في مرحلة الاستيقاظ. كل لحظة تقاوم فيها هي مسمار إضافي في نعش هذه الخدعة!", textAlign: TextAlign.center, style: TextStyle(fontSize: 20)))),
+  );
 }
