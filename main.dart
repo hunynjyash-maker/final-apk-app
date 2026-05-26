@@ -1,32 +1,24 @@
-import 'package:flutter/material.dart';
+name: Build Flutter APK
 
-void main() => runApp(const MaterialApp(home: MainApp(), debugShowCheckedModeBanner: false));
+on:
+  push:
+    branches: [ "main" ]
 
-class MainApp extends StatefulWidget {
-  const MainApp({super.key});
-  @override
-  State<MainApp> createState() => _MainAppState();
-}
-
-class _MainAppState extends State<MainApp> {
-  int _tab = 0;
-  final List<Widget> _pages = [const HomeP(), const ChaptersP(), const SubsP(), const SupportP()];
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: _pages[_tab],
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _tab,
-        selectedItemColor: Colors.teal,
-        onTap: (i) => setState(() => _tab = i),
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'الرئيسية'),
-          BottomNavigationBarItem(icon: Icon(Icons.book), label: 'الفصول'),
-          BottomNavigationBarItem(icon: Icon(Icons.psychology), label: 'البدائل'),
-          BottomNavigationBarItem(icon: Icon(Icons.support_agent), label: 'الدعم'),
-        ],
-      ),
-    );
-  }
-}
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.x'
+      - run: flutter pub get
+      - run: flutter build apk --release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: app-release
+          path: build/app/outputs/flutter-apk/app-release.apk
